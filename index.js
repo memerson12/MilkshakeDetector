@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const { v4: uuidv4 } = require('uuid');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = require('node-fetch');
 require('dotenv').config()
 
 async function main() {
@@ -23,7 +23,7 @@ async function main() {
     const milkshakeMenu = await page.$(`[class="tab-pane active"]`);
     if (milkshakeMenu && (await (await milkshakeMenu.getProperty('firstElementChild')).getProperty('childElementCount'))._remoteObject.value > 0) {
         console.log("Milkshake is ready!");
-        await fetch("https://api.groupme.com/v3/groups/85327648/messages?token=" + process.env.GROUPME_TOKEN, {
+        await fetch(`https://api.groupme.com/v3/groups/85327648/messages?token=${process.env.GROUPME_TOKEN}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -37,7 +37,7 @@ async function main() {
         });
     } else {
         console.log("Milkshake is not ready!");
-        await fetch("https://api.groupme.com/v3/groups/85327648/messages?token=" + process.env.GROUPME_TOKEN, {
+        await fetch(`https://api.groupme.com/v3/groups/85327648/messages?token=${process.env.GROUPME_TOKEN}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
