@@ -1,6 +1,10 @@
-import puppeteer from "puppeteer";
+const puppeteer = require('puppeteer');
 
-const browser = await puppeteer.launch({headless: false});
-const page = await browser.newPage();
-await page.setViewport({height: 695, width: 1440});
-await page.goto('https://get.cbord.com/wpi/full/login.php');
+async function main() {
+    const browser = await puppeteer.launch({headless: false});
+    const page = await browser.newPage();
+    await page.setViewport({height: 695, width: 1440});
+    await page.goto('https://get.cbord.com/wpi/full/login.php');
+}
+main()
+
