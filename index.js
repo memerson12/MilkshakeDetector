@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
-const { v4: uuidv4 } = require('uuid');
-const fetch = require('node-fetch');
+const {v4: uuidv4} = require('uuid');
+const axios = require('axios').default;
 require('dotenv').config()
 
 async function main() {
@@ -23,31 +23,27 @@ async function main() {
     const milkshakeMenu = await page.$(`[class="tab-pane active"]`);
     if (milkshakeMenu && (await (await milkshakeMenu.getProperty('firstElementChild')).getProperty('childElementCount'))._remoteObject.value > 0) {
         console.log("Milkshake is ready!");
-        await fetch(`https://api.groupme.com/v3/groups/85327648/messages?token=${process.env.GROUPME_TOKEN}`, {
-            method: "POST",
+        await axios.post(`https://api.groupme.com/v3/groups/85327648/messages?token=${process.env.GROUPME_TOKEN}`, {
+            message: {
+                source_guid: uuidv4(),
+                text: "Milkshake is ready!"
+            }
+        }, {
             headers: {
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: {
-                    source_guid: uuidv4(),
-                    "text": "Milkshake is not ready!"
-                }
-            })
+            }
         });
     } else {
         console.log("Milkshake is not ready!");
-        await fetch(`https://api.groupme.com/v3/groups/85327648/messages?token=${process.env.GROUPME_TOKEN}`, {
-            method: "POST",
+        await axios.post(`https://api.groupme.com/v3/groups/85327648/messages?token=${process.env.GROUPME_TOKEN}`, {
+            message: {
+                source_guid: uuidv4(),
+                text: "Milkshake is not ready!"
+            }
+        }, {
             headers: {
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: {
-                    source_guid: uuidv4(),
-                    "text": "Milkshake is not ready!"
-                }
-            })
+            }
         });
     }
     await browser.close();
@@ -55,4 +51,18 @@ async function main() {
 
 
 main();
+
+async function test() {
+    await axios.post(`https://api.groupme.com/v3/groups/85327648/messages?token=${process.env.GROUPME_TOKEN}`, {
+        message: {
+            source_guid: uuidv4(),
+            text: "Milkshake is not ready!"
+        }
+    }, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
+
 // test();
